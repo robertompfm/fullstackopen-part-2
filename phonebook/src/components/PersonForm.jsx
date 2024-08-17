@@ -1,4 +1,3 @@
-import axios from 'axios'
 import personService from '../services/persons'
 
 const PersonForm = ({
@@ -7,8 +6,15 @@ const PersonForm = ({
     newName, 
     setNewName, 
     newNumber, 
-    setNewNumber
+    setNewNumber,
+    showNotification
 }) => {
+    const handleSuccess = (message) => {
+        setNewName('')
+        setNewNumber('')
+        showNotification(message)
+    }
+
     const createPerson = (personObjet) => {
         personService
             .create(personObjet)
@@ -17,8 +23,8 @@ const PersonForm = ({
                     ...persons,
                     returnedPerson
                 ])
-                setNewName('')
-                setNewNumber('')
+
+                handleSuccess(`${returnedPerson.name} added`)
             })
     }
 
@@ -27,8 +33,8 @@ const PersonForm = ({
             .update(personObject.id, personObject)
             .then(returnedPerson => {
                 setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
-                setNewName('')
-                setNewNumber('')
+                
+                handleSuccess(`${returnedPerson.name} updated`)
             })
     }
 

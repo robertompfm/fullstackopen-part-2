@@ -1,7 +1,7 @@
 import PersonInfo from "./PersonInfo"
 import personService from "../services/persons"
 
-const PersonList = ({setPersons, persons, search}) => {
+const PersonList = ({setPersons, persons, search, showNotification}) => {
     const filterFunction = (person) => {
         return search === '' || person.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
     }
@@ -12,7 +12,11 @@ const PersonList = ({setPersons, persons, search}) => {
                 .remove(id)
                 .then(returnedPerson => {
                     setPersons(persons.filter(person => person.id !== returnedPerson.id))
+                    showNotification(`${returnedPerson.name} deleted`)
                 })
+                .catch(_error => {
+                    showNotification(`Information of ${name} has already been removed`, true)
+                }) 
         }
     }
 
